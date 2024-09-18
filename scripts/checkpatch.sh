@@ -378,6 +378,10 @@ function pack_trust_image()
 function check_dirty()
 {
 	for FILE in `find -name '*spl*.bin' -o -name '*tpl*.bin' -o -name '*usbplug*.bin' -o -name '*bl31*.elf' -o -name '*bl32*.bin'`; do
+		if [[ "${FILE}" == *fspi1* ]]; then
+			echo "Skip clean: ${FILE}"
+			continue;
+		fi
 		echo "Checking clean: ${FILE}"
 		if strings ${FILE} | grep '\-dirty ' ; then
 			echo "ERROR: ${FILE} is dirty"
@@ -408,6 +412,32 @@ function check_mode()
 	fi
 }
 
+function check_version()
+{
+	echo "Checking fwver..."
+	git whatchanged -1 --name-only | sed -n '/bin\//p' | sed -n '/ddr/p; /tpl/p; /spl/p; /bl31/p; /bl32/p; /tee/p;' | while read FILE; do
+		if ! test -f ${FILE}; then
+			continue
+		fi
+
+		NAME_VER=`echo ${FILE} | grep -o 'v[0-9][.][0-9][0-9]'`
+		# ignore version < v1.00
+		if [[ "${NAME_VER}" == *v0.* ]]; then
+			continue
+		fi
+
+		if ! strings ${FILE} | grep -q 'fwver: ' ; then
+			echo "ERROR: ${FILE}: No \"fwver: \" string found in binary"
+			exit 1
+		fi
+		FW_VER=`strings ${FILE} | grep -o 'fwver: v[1-9][.][0-9][0-9]' | awk '{ print $2 }'`
+		if [ "${NAME_VER}" != "${FW_VER}" ] ; then
+			echo "ERROR: ${FILE}: file version is ${NAME_VER}, but fw version is ${FW_VER}."
+			exit 1
+		fi
+	done
+}
+
 function finish()
 {
 	echo "OK, everything is nice."
@@ -415,6 +445,7 @@ function finish()
 }
 
 check_mode
+check_version
 check_docs
 check_dirty
 check_stripped
