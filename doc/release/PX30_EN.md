@@ -1,5 +1,45 @@
 # PX30 Release Note
 
+## px30_bl32_v2.18.bin
+
+| Date       | File                | Build commit | Severity  |
+| ---------- | :------------------ | ------------ | --------- |
+| 2024-09-02 | px30_bl32_v2.18.bin | 6c78a7d8c    | important |
+
+### New
+
+1.  Support software TA encryption key, customers can use TA encryption function without burning the key.
+
+------
+
+## px30_ddr_333MHz_v2.11.bin
+
+| Date       | file                      | Build commit | Severity  |
+| ---------- | ------------------------- | ------------ | --------- |
+| 2024-08-19 | px30_ddr_333MHz_v2.11.bin | 01f75b4      | important |
+
+### Fixed
+
+| Index | Severity  | Update                                                | Issue description                                            | Issue source |
+| ----- | --------- | ----------------------------------------------------- | ------------------------------------------------------------ | ------------ |
+| 1     | important | Solve the ddr4 power on probability capacity anomaly. | If the power is off and the power is on, the ddr4 probability will lack 1/4 or 1/2 capacity. | -            |
+
+------
+
+## px30_bl32_v2.17.bin
+
+| Date       | File                | Build commit | Severity  |
+| ---------- | :------------------ | ------------ | --------- |
+| 2024-07-09 | px30_bl32_v2.17.bin | 7ab599eca    | important |
+
+### New
+
+1.  Other security enhancements.
+2.  RPMB change read data to multiple times.
+3.  Increase MPI_MEMPOOL_SIZE size.
+
+------
+
 ## px30_ddr_333MHz_v2.10.bin
 
 | Date       | file                      | Build commit | Severity  |
